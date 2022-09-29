@@ -16,13 +16,11 @@ guard :rspec, cmd: 'bundle exec rspec' do
   ruby = dsl.ruby
   dsl.watch_spec_files_for(ruby.lib_files)
 
-  # Rails files
-  rails = dsl.rails(view_extensions: %w[erb haml slim])
-  dsl.watch_spec_files_for(rails.app_files)
-  dsl.watch_spec_files_for(rails.views)
+  watch('app.rb') { 'spec/app_spec.rb' }
 end
 
-guard :rubocop, cli: %w[-A] do
+guard :rubocop, cli: %w[-a] do
+  watch('Guardfile')
   watch(/.+\.rb$/)
   watch(%r{(?:.+/)?\.rubocop(?:_todo)?\.yml$}) { |m| File.dirname(m[0]) }
 end

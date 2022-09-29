@@ -5,11 +5,11 @@ require 'item_parser'
 
 RSpec.describe ItemParser do
   describe '.parse' do
-    it 'should return nil for invalid data' do
+    it 'returns nil for invalid data' do
       expect(ItemParser.parse('invalid')).to be_nil
     end
 
-    it 'should return a hash' do
+    it 'returns a hash' do
       result = {
         quantity: 1,
         name: 'MacBook Pro 13-inch',

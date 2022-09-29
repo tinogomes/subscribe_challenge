@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# class ItemParser
 class ItemParser
   ITEM_REGEXP = /\A^(?<quantity>\d+) (?<name>.+) at (?<price>[0-9,.]+)$\z/
 
