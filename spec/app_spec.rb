@@ -4,7 +4,7 @@ require 'spec_helper'
 require_relative '../app'
 
 RSpec.describe 'App' do
-  describe '.call' do
+  describe '#call' do
     it 'delegates to instance call' do
       expect_any_instance_of(App).to receive(:call)
 
