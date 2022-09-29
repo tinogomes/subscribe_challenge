@@ -12,4 +12,5 @@ If there is not input_file argument, it will use standard Unix STDIN, like:
 
 ## Notes
 
-The suggested entries in the challenge are found in files in the `carts` directory.
+1. The suggested entries in the challenge are found in files in the `carts` directory.
+2. I Used a spreadsheet to understand how to calculate the sales tax and import duty for each item. https://docs.google.com/spreadsheets/d/1D07CsZEPhPTojmqeL-A5CO9B2xbjJYsVvJMh-AjwUAs/edit?usp=sharing
