@@ -43,10 +43,6 @@ class App
 
     cart = Cart.call(cart_items)
 
-    print_cart(cart.to_s)
-  end
-
-  def print_cart(cart)
     puts cart
   end
 end

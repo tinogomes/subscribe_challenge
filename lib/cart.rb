@@ -9,6 +9,8 @@ class Cart
     parse_items!
   end
 
+  def parse_items!; end
+
   def to_s
     [
       '1 book: 13.49',
