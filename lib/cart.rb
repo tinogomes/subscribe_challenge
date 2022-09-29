@@ -4,20 +4,14 @@ require 'item_parser'
 require 'item'
 
 class Cart
-  attr_reader :items, :data
-
-  def self.call(items)
-    new(items).tap(&:call)
-  end
+  attr_reader :items, :tax_total, :total
 
   def initialize(items)
-    @items = items
-    @data = {}
-  end
+    @items = parse_items(items)
+    @tax_total = 0
+    @total = 0
 
-  def call
-    parse_items!
-    calculate_totals!
+    calculate!
   end
 
   def parse_to_calculated_item(item)
@@ -25,20 +19,24 @@ class Cart
 
     return if item_attributes.nil?
 
-    Item.new(**item_attributes).tap(&:calculate!)
+    Item.new(**item_attributes)
   end
 
-  def parse_items!
-    data[:items] = items.map { |item| parse_to_calculated_item(item) }.compact
+  def parse_items(original_items)
+    @items = original_items.map { |item| parse_to_calculated_item(item) }.compact
   end
 
-  def calculate_totals!; end
+  def calculate!
+    items.each do |item|
+      @total += item.total
+      @tax_total += item.tax_total
+    end
+  end
 
   def to_s
-    [
-      '1 book: 13.49',
-      'Sales Taxes: 0.00',
-      'Total: 13.49'
-    ].join("\n")
+    result = items.map(&:to_s)
+    result << format('Sales Taxes: %.2f', tax_total)
+    result << format('Total: %.2f', total)
+    result.join("\n")
   end
 end

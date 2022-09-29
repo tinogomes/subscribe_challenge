@@ -41,7 +41,7 @@ class App
   def process(cart_items)
     cart_items = cart_items.map(&:chomp).filter { |obj| !obj.empty? }
 
-    cart = Cart.call(cart_items)
+    cart = Cart.new(cart_items)
 
     puts cart
   end

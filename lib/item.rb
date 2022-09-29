@@ -37,6 +37,10 @@ class Item
     (subtotal + tax_total).round(2)
   end
 
+  def to_s
+    format('%<quantity>d %<name>s: %<total>.2f', { quantity:, name:, total: })
+  end
+
   private
 
   def calculate!

@@ -31,6 +31,8 @@ RSpec.describe Item do
           expect(music_cd.instance_eval(attribute)).to eq expected_value
         end
       end
+
+      it { expect(music_cd.to_s).to eq '1 music CD: 16.49' }
     end
 
     context 'with imported common item' do
@@ -53,17 +55,19 @@ RSpec.describe Item do
           expect(perfume.instance_eval(attribute)).to eq expected_value
         end
       end
+
+      it { expect(perfume.to_s).to eq '1 imported bottle of perfume: 32.19' }
     end
 
     context 'with exempt item' do
-      subject(:book) { Item.new(quantity: 2, name: 'book', unit_price: 12.49) }
+      subject(:book) { Item.new(quantity: 2, name: 'books', unit_price: 12.49) }
 
       it { is_expected.not_to be_imported }
       it { is_expected.to be_exempt_item }
 
       [
         ['quantity', 2],
-        %w[name book],
+        %w[name books],
         ['unit_price', 12.49],
         ['sales_tax', 0.00],
         ['import_duty', 0.00],
@@ -75,6 +79,8 @@ RSpec.describe Item do
           expect(book.instance_eval(attribute)).to eq expected_value
         end
       end
+
+      it { expect(book.to_s).to eq '2 books: 24.98' }
     end
 
     context 'with imported exempt item' do
@@ -97,6 +103,8 @@ RSpec.describe Item do
           expect(box_of_chocolates.instance_eval(attribute)).to eq expected_value
         end
       end
+
+      it { expect(box_of_chocolates.to_s).to eq '3 imported boxes of chocolates: 35.55' }
     end
   end
 end
