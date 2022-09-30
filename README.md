@@ -2,6 +2,10 @@
 
 Read on: https://gist.github.com/safplatform/792314da6b54346594432f30d5868f36#file-challenge-md
 
+## Requirements
+
+* Ruby 3.1+
+
 ## How to execute
 
 `$ ruby app.rb [<input_file>]`
