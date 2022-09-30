@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-class InvalidInputError < StandardError; end
-
 BASE_SALES_TAX_RATE = 10
 BASE_IMPORT_DUTY_RATE = 5
 FREE_ITEMS_FOR_SALES_TAX = %w[book chocolate pill].freeze
@@ -9,6 +7,8 @@ FREE_ITEMS_FOR_SALES_TAX = %w[book chocolate pill].freeze
 def float_to_cents(value)
   (value * 100).to_i
 end
+
+class InvalidInputError < StandardError; end
 
 def parse_to_hash(input)
   parser_regex = /\A^(\d+) ?(imported)? (.*) at ([0-9,.]+)$\z/
@@ -53,7 +53,7 @@ def calculate_item(item)
   import_duty_in_cents = calculate_rate(item[:unit_price_in_cents], import_duty_rate_for_item(item[:item])) * qtt
   total_in_cents = ((qtt * item[:unit_price_in_cents]) + sales_tax_in_cents + import_duty_in_cents)
 
-  item.merge(sales_tax_in_cents:, import_duty_in_cents:, total_in_cents:)
+  item.merge(sales_tax_in_cents: sales_tax_in_cents, import_duty_in_cents: import_duty_in_cents, total_in_cents: total_in_cents)
 end
 
 def process_cart(cart)
@@ -65,7 +65,7 @@ def process_cart(cart)
     total_in_cents += item[:total_in_cents]
   end
 
-  cart.merge(total_taxes_in_cents:, total_in_cents:)
+  cart.merge(total_taxes_in_cents: total_taxes_in_cents, total_in_cents: total_in_cents)
 end
 
 def format_cents(value)
@@ -76,7 +76,7 @@ def cart_to_print(cart)
   result = []
   cart[:items].each do |item|
     total_formatted = format_cents(item[:total_in_cents])
-    result << format('%<qtt>d %<item>s: %<total_formatted>s', item.merge(total_formatted:))
+    result << format('%<qtt>d %<item>s: %<total_formatted>s', item.merge(total_formatted: total_formatted))
   end
   result << format('Sales Taxes: %s', format_cents(cart[:total_taxes_in_cents]))
   result << format('Total: %s', format_cents(cart[:total_in_cents]))
@@ -85,13 +85,11 @@ def cart_to_print(cart)
 end
 
 if $PROGRAM_NAME == __FILE__
-  if ARGV.empty?
-    cart_lines = $stdin.readlines.map(&:chomp)
-  else
-    file = File.open(ARGV[0])
-    cart_lines = file.readlines.map(&:chomp)
-  end
-  cart_lines = cart_lines.map { |line| calculate_item(parse_to_hash(line)) }
+  cart_lines = ARGF.readlines.map(&:chomp)
+
+  cart_lines = cart_lines
+               .map { |line| parse_to_hash(line) }
+               .map { |item| calculate_item(item) }
 
   cart = process_cart(items: cart_lines)
 
